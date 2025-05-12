@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Añade una descripción relevante para tu aplicación -->
+    <meta name="description" content="Sistema de gestión interna para Pollería Montiel. Administración de proveedores, lotes y más.">
+    
+    <title>{{ title + " - " if title else "" }}Gestión Montiel</title>
+    
+    <!-- Pico.css CDN -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <style>
+        /* Asegura que las imágenes sean responsivas por defecto */
+        img {
+            max-width: 100%; /* La imagen nunca será más ancha que su contenedor */
+            height: auto;   /* Mantiene la proporción de aspecto original */
+            display: block; /* Evita espacios extra debajo de imágenes en algunos contextos */
+        }
+        
+        /* Puedes añadir aquí otros estilos globales que necesites */
+        
+        
+        /* -------------------------------------- */
+        /* Barra de Navegación (Nav)              */
+        /* -------------------------------------- */
+        
+        /* Estilo para el enlace principal/logo "Gestión Montiel" */
+        .brand-link {
+            text-decoration: none; /* Elimina el subrayado */
+            color: inherit; /* Hereda el color del texto del elemento padre (nav) */
+            /* Puedes añadir un efecto hover si lo deseas */
+            /* transition: color 0.2s ease-in-out; */
+        }
+        
+        /* Ejemplo de efecto hover usando una variable de color de Pico.css */
+        /* .brand-link:hover { */
+            /* color: var(--pico-primary-hover); */
+            /* O simplemente un color diferente si no quieres depender de Pico aquí */
+            /* color: #007bff; */ 
+        /* } */
+        
+        /* Ajustes menores a la navegación si son necesarios (opcional) */
+        /* nav ul { */
+            /* margin-bottom: 0; */ /* Pico ya maneja esto bien usualmente */
+        /* } */
+        
+        
+        /* -------------------------------------- */
+        /* Mensajes Flash (Notificaciones)       */
+        /* -------------------------------------- */
+        
+        /* Estilos para el botón de cerrar [×] dentro de los mensajes <article> */
+        /* Pico puede tener sus propias clases de alerta (e.g., .alert), ajusta el selector si usas otras clases */
+        article.message .close, 
+        article.success .close, 
+        article.warning .close, 
+        article.error .close { /* Asegúrate de cubrir las categorías que uses */
+            float: right;          /* Alinea el botón a la derecha del texto */
+            background: none;      /* Sin color de fondo */
+            border: none;          /* Sin borde */
+            padding: 0 0.5rem;     /* Espaciado horizontal ligero */
+            margin-left: 1rem;     /* Espacio entre el texto del mensaje y el botón */
+            
+            font-size: 1.5rem;     /* Tamaño del símbolo '×' */
+            font-weight: bold;     /* Símbolo más grueso */
+            line-height: 1;        /* Ajusta la altura de línea para centrar verticalmente */
+            
+            color: inherit;        /* Hereda el color del texto del mensaje (bueno para diferentes tipos de mensajes) */
+            opacity: 0.6;          /* Lo hace un poco menos prominente */
+            cursor: pointer;       /* Indica que es clickeable */
+            
+            transition: opacity 0.2s ease-in-out; /* Transición suave para el hover */
+        }
+        
+        /* Efecto hover para el botón de cerrar */
+        article.message .close:hover,
+        article.success .close:hover, 
+        article.warning .close:hover, 
+        article.error .close:hover {
+            opacity: 1;            /* Lo hace completamente opaco al pasar el ratón */
+        }
+        
+        /* Clase opcional para ocultar elementos con JS (si prefieres usar clases en lugar de style.display='none') */
+        /* .hidden {
+            display: none !important;  /* !important por si acaso otros estilos interfieren */
+        /* } */
+        
+        
+        /* -------------------------------------- */
+        /* Pie de Página (Footer)                 */
+        /* -------------------------------------- */
+        
+        /* Estilo para el contenedor del footer */
+        /* Usamos un selector más específico para evitar conflictos si hay otros footers */
+        body > footer.container { 
+            margin-top: 3rem;     /* Aumenta el espacio sobre el footer */
+            padding-top: 1.5rem;  /* Espacio interno arriba */
+            padding-bottom: 1rem; /* Espacio interno abajo */
+            text-align: center;   /* Centra el texto del copyright */
+            
+            /* Añade una línea sutil arriba usando una variable de Pico.css */
+            border-top: 1px solid var(--pico-muted-border-color); 
+        }
+        
+        /* -------------------------------------- */
+        /* Añade aquí tus estilos específicos   */
+        /* para otras secciones o componentes    */
+        /* -------------------------------------- */
+        
+        /* Ejemplo: Estilos para tablas */
+        /* table { */
+            /* width: 100%; */ /* Asegurar que ocupen el ancho disponible */
+        /* } */
+        
+        /* Ejemplo: Hacer tablas desplazables en móvil */
+        /* @media (max-width: 768px) { */
+            /* .table-responsive { */
+                /* display: block; */
+                /* width: 100%; */
+                /* overflow-x: auto; */ /* Permite scroll horizontal */
+                /* -webkit-overflow-scrolling: touch; */ /* Scroll suave en iOS */
+            /* } */
+            /* Entonces envuelves tus tablas en <div class="table-responsive">...</div> */
+        /* } */
+    </style>
+    <!-- <link rel="stylesheet" href="{{ url_for('static/css', filename='styles.css') }}"> --> {# revisar la implementacion de de los enlaces para styles.css #}
+</head>
+<body>
+    <!-- Añadido aria-label para accesibilidad -->
+    <nav class="container-fluid" aria-label="Navegación principal">
+        <ul>
+            <!-- Añadida clase 'brand-link' para CSS -->
+            <li><strong><a href="{{ url_for('index') }}" class="brand-link">Gestión Montiel</a></strong></li>
+        </ul>
+        <ul>
+            <li><a href="{{ url_for('index') }}">Inicio</a></li>
+            <li><a href="{{ url_for('pollo_vivo.listar_proveedores') }}">Proveedores</a></li>
+            <!-- <li><a href="#">Lotes Pollo Vivo</a></li> Placeholder -->
+            <!-- Más enlaces de navegación -->
+        </ul>
+    </nav>
+
+    <main class="container">
+        {# Mostrar mensajes flash #}
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    {# La clase 'message' se usa como fallback si no hay categoría #}
+                    {# Pico.css podría usar 'alert', 'success', 'warning', 'error' como clases si las pasas como categoría #}
+                    <article class="{{ category if category else 'message' }}" aria-live="polite">
+                        {{ message }}
+                        {# Eliminado onclick. Añadido type="button". Mantenido aria-label. #}
+                        <button type="button" class="close" aria-label="Cerrar notificación">×</button>
+                    </article>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {# Bloque de contenido principal #}
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer sin estilos en línea -->
+    <footer class="container">
+        <small>© {% now "Y" %} Pollería Montiel. Todos los derechos reservados.</small>
+    </footer>
+    
+    <!-- Tu JS al final del body para mejor rendimiento o usa 'defer' en el head -->
+    <script>
+        /**
+         * Script principal de la aplicación Gestión Montiel
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            /**
+             * Funcionalidad para cerrar los mensajes flash (notificaciones).
+             * Busca todos los botones con clase 'close' dentro de elementos 'article'
+             * (asumiendo que los mensajes flash se muestran en <article>).
+             * Al hacer clic, oculta el <article> contenedor del mensaje.
+             */
+            const closeButtons = document.querySelectorAll('article .close'); // Selector más específico si es necesario
+            
+            if (closeButtons.length > 0) {
+                closeButtons.forEach(button => {
+                    button.addEventListener('click', (event) => {
+                        // event.currentTarget se refiere al botón en el que se hizo clic
+                        const messageContainer = event.currentTarget.closest('article'); // Encuentra el <article> padre más cercano
+                        if (messageContainer) {
+                            // Oculta el contenedor del mensaje
+                            messageContainer.style.display = 'none'; 
+                            
+                            // Alternativa: Añadir una clase para ocultar con animación CSS
+                            // messageContainer.classList.add('hidden'); 
+                        }
+                    });
+                });
+                console.log(`Añadidos listeners a ${closeButtons.length} botones de cierre de mensajes.`); // Mensaje de depuración opcional
+            } else {
+                // console.log("No se encontraron botones de cierre de mensajes."); // Mensaje de depuración opcional
+            }
+        
+            // --- Puedes añadir más funcionalidades aquí ---
+            // Ejemplo: inicializar algún componente, validaciones de formularios, etc.
+            console.log("Gestión Montiel JS inicializado."); // Mensaje de depuración opcional
+        
+        }); // Fin de DOMContentLoaded
+    </script>
+</body>
+</html>

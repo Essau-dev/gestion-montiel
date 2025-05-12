@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <header>
+        <hgroup>
+            <h1>Lista de Proveedores</h1>
+            <h2>Gestiona los proveedores de pollo vivo.</h2>
+        </hgroup>
+        <a href="{{ url_for('pollo_vivo.registrar_proveedor') }}" role="button" class="contrast">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16" style="vertical-align: text-bottom; margin-right: 0.3em;">
+                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+            </svg>
+            Nuevo Proveedor
+        </a>
+    </header>
+
+    {% if proveedores %}
+    <figure>
+        <table role="grid">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Contacto</th>
+                    <th scope="col">Banco</th>
+                    <th scope="col">Cuenta/CLABE</th>
+                    <th scope="col">Activo</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prov in proveedores %}
+                <tr>
+                    <td>{{ prov.id }}</td>
+                    <td>{{ prov.nombre }}</td>
+                    <td>{{ prov.contacto_telefono if prov.contacto_telefono else '-' }}</td>
+                    <td>{{ prov.datos_pago_banco if prov.datos_pago_banco else '-' }}</td>
+                    <td>{{ prov.datos_pago_cuenta if prov.datos_pago_cuenta else '-' }}</td>
+                    <td><span class="{{ 'success' if prov.activo else 'danger' }}">{{ "Sí" if prov.activo else "No" }}</span></td>
+                    <td>
+                        <a href="#" class="secondary outline" role="button" style="padding: 0.2rem 0.5rem; font-size: 0.8rem;">Editar</a>
+                        <!-- Más acciones como 'Ver detalles' o 'Eliminar' podrían ir aquí -->
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </figure>
+    {% else %}
+    <article>
+        <p>No hay proveedores registrados todavía. ¡Añade el primero!</p>
+    </article>
+    {% endif %}
+{% endblock %}
