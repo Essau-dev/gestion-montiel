@@ -1,0 +1,41 @@
+gestion-montiel/
+├── venv/                     # Entorno virtual (gestionado por Python)
+├── gestion_montiel/          # Paquete principal de la aplicación Flask
+│   ├── __init__.py           # Inicializa la app Flask, registra Blueprints, etc.
+│   ├── routes/               # Contiene los Blueprints (módulos de rutas)
+│   │   ├── __init__.py
+│   │   ├── pollo_vivo.py     # Rutas específicas para el módulo Pollo Vivo
+│   │   ├── productos.py      # Rutas para Productos (futuro)
+│   │   └── ...               # Otros módulos de rutas
+│   ├── models/               # Contiene las definiciones de la BD (ej. tablas SQLite)
+│   │   ├── __init__.py
+│   │   ├── proveedor.py      # Modelo para Proveedor
+│   │   ├── lote_pollo_vivo.py# Modelo para LotePolloVivo
+│   │   └── ...               # Otros modelos
+│   ├── static/               # Archivos estáticos (CSS, JS, Imágenes)
+│   │   ├── css/
+│   │   │   └── styles.css    # CSS personalizado (o link a framework)
+│   │   ├── js/
+│   │   │   └── script.js
+│   │   └── img/
+│   ├── templates/            # Plantillas HTML (Jinja2)
+│   │   ├── base.html         # Plantilla base (estructura común HTML)
+│   │   ├── index.html        # Página principal (opcional)
+│   │   ├── 404.html          # Página de error 404 (opcional)
+│   │   ├── 500.html          # Página de error 500 (opcional)
+│   │   ├── pollo_vivo/       # Plantillas específicas para Pollo Vivo
+│   │   │   ├── registrar_proveedor.html
+│   │   │   ├── listar_proveedores.html
+│   │   │   ├── registrar_lote.html
+│   │   │   ├── listar_lotes.html
+│   │   │   └── _formulario_lote.html # Fragmento reutilizable (opcional)
+│   │   └── productos/        # Plantillas para Productos (futuro)
+│   │       └── ...
+│   ├── forms.py              # (Opcional) Si usas Flask-WTF para formularios
+│   └── utils.py              # (Opcional) Funciones de utilidad compartidas
+├── app.py                    # Punto de entrada para ejecutar la aplicación (o run.py)
+├── config.py                 # Configuraciones de la aplicación (claves secretas, BD, etc.)
+├── requirements.txt          # Dependencias del proyecto Python
+├── .gitignore                # Archivos/carpetas a ignorar por Git
+├── README.md                 # Descripción del proyecto
+└── gestion_montiel.db        # Archivo de la base de datos SQLite (se creará después)
